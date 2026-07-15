@@ -2,14 +2,13 @@
 
 **A data-driven engineering analysis system that reconstructs heating-element
 behavior, thermal response, and airflow characteristics of a convection oven
-cavity from instrumented test data — thermocouple arrays, power metering, and
-controller telemetry.**
+cavity from instrumented test data — thermocouple arrays.**
 
 > **Note on scope.** This repository is a *technical overview* of the system:
 > its architecture, analysis methodology, and engineering practices. The
 > implementation, product-specific parameters, and laboratory measurement data
 > are proprietary and are intentionally **not** published here. Everything in
-> this document is described at the level of standard, textbook engineering
+> this document is described at the level of standard, engineering
 > methods.
 
 ---
@@ -30,12 +29,7 @@ physics-based metrics that:
 - reconstruct *which heating elements were active, when, and at what duty*,
   purely from the stacked power signal;
 - quantify *heat distribution quality* (uniformity, stratification,
-  element-to-location coupling) as objective figures of merit;
-- produce *CFD-ready boundary conditions and order-of-magnitude estimates*
-  (convective coefficients, dimensionless groups, reconstructed temperature
-  fields) so that simulation and measurement can validate each other.
-
-The result is a fast, repeatable A/B evaluation loop for design revisions.
+  element-to-location coupling).
 
 ## 2. System capabilities
 
@@ -44,7 +38,7 @@ backed by a framework-agnostic analysis module:
 
 | Capability | Description |
 |---|---|
-| **Run overview** | KPI summary, preheat detection, temperature/power traces for each uploaded run |
+| **Run overview**     | KPI summary, preheat detection, temperature/power traces for each uploaded run |
 | **Preheat analysis** | Unsupervised segmentation of the element-cycling pattern during heat-up; per-element effective wattage identification |
 | **Control analysis** | Decomposition of the measured power signal into per-element ON/OFF states, duty cycles, and energy contribution shares |
 | **Thermal analysis** | Heating rates per sensor location, temperature-uniformity index, element→location coupling, time constants, overshoot/settling, energy balance |
@@ -156,27 +150,6 @@ Each thermocouple location is treated as a thermal node
 - **Dynamics** — first-order time constants, overshoot and settling around
   the setpoint, and an electrical-in vs. thermal-stored/lost energy balance.
 
-### 4.6 Convection / CFD-adjacent estimates
-
-Deliberately order-of-magnitude, intended to bound and cross-validate CFD:
-
-- **Convective heat-transfer coefficients** via the lumped-capacitance method
-  (validity checked against Biot number), with air properties evaluated at
-  film temperature.
-- **Dimensionless groups** — Nusselt and Reynolds numbers from estimated air
-  velocity and cavity characteristic lengths; buoyancy indicators for
-  natural- vs. forced-convection dominance.
-- **Thermal stratification index** — normalized top-to-bottom gradient; low
-  values indicate effective forced-convection mixing.
-- **Temperature-field reconstruction** — Gaussian-process kriging (Matérn
-  kernel + white-noise term) interpolates the sparse thermocouple array onto
-  a 3D grid, directly comparable against CFD contour plots.
-- **Boundary-condition extraction** — wall temperatures and heat-flux
-  estimates packaged for CFD case setup.
-- **Fan effects** — predicted sensitivity of convective performance to fan
-  speed, and characterization of periodic fan-direction reversal from the
-  thermal response.
-
 ## 5. Technology stack
 
 | Layer | Technology |
@@ -200,8 +173,6 @@ Deliberately order-of-magnitude, intended to bound and cross-validate CFD:
   scaling is trivial.
 
 ## 7. What is intentionally *not* in this repository
-
-To respect confidentiality obligations, the following are withheld:
 
 - Application and analysis **source code**.
 - **Product parameters** — element ratings, cavity geometry, sensor
