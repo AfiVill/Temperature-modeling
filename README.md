@@ -2,7 +2,7 @@
 
 **A data-driven engineering analysis system that reconstructs heating-element
 behavior, thermal response, and airflow characteristics of a convection oven
-cavity from instrumented test data — thermocouple arrays.**
+cavity  — thermocouple arrays.**
 
 > **Note on scope.** This repository is a *technical overview* of the system:
 > its architecture, analysis methodology, and engineering practices. The
